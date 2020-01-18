@@ -1,4 +1,4 @@
-name: 'Setup Unity Editor for use with actions'
+name: 'create-unitypackage'
 description: 'This action sets up an Unity Editor for use in actions'
 author: 'pCYSl5EDgo'
 inputs:
