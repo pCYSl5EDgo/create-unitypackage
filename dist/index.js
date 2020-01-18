@@ -2,16 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@actions/core");
 const io_1 = require("@actions/io");
+const exec_1 = require("@actions/exec");
 const js_yaml_1 = require("js-yaml");
 const fs_1 = require("fs");
 const path_1 = require("path");
 const os_1 = require("os");
-const compressing_1 = require("compressing");
 const MakeTGZ = async (tmpFolder, output) => {
     core_1.info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
-    await compressing_1.tgz.compressDir(tmpFolder, output + ".tgz");
+    await exec_1.exec("tar -zcf " + output + " " + tmpFolder);
     await io_1.rmRF(tmpFolder);
-    await io_1.mv(output + ".tgz", output, { force: true });
 };
 const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, destination, index, output, processHasDone) => {
     const metaFileAbsolutePath = path_1.join(projectRoot, metaFileRelativePathWithExtension);
