@@ -1,5 +1,5 @@
 import { getInput, info } from '@actions/core';
-import { mkdirP, cp, rmRF } from '@actions/io';
+import { mkdirP, cp, rmRF, mv } from '@actions/io';
 import { exec } from '@actions/exec';
 import { safeLoad } from 'js-yaml';
 import { readFile, writeFile } from 'fs';
@@ -13,7 +13,10 @@ interface AssetMetaData {
 
 const MakeTGZ = async (tmpFolder: string, output: string) => {
     info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
-    await exec("tar -zcf \"" + output + "\" \"" + tmpFolder + "\"");
+    const archtemp = join(tmpdir(), "archtemp.tar");
+    await exec("tar -cf " + archtemp + " -C \"" + tmpFolder + "\" *");
+    await exec('gzip -f ' + archtemp);
+    await mv(archtemp + ".gz", output);
     await rmRF(tmpFolder);
 };
 

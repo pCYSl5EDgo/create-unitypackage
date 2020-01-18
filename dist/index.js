@@ -9,7 +9,10 @@ const path_1 = require("path");
 const os_1 = require("os");
 const MakeTGZ = async (tmpFolder, output) => {
     core_1.info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
-    await exec_1.exec("tar -zcf \"" + output + "\" \"" + tmpFolder + "\"");
+    const archtemp = path_1.join(os_1.tmpdir(), "archtemp.tar");
+    await exec_1.exec("tar -cf " + archtemp + " -C \"" + tmpFolder + "\" *");
+    await exec_1.exec('gzip -f ' + archtemp);
+    await io_1.mv(archtemp + ".gz", output);
     await io_1.rmRF(tmpFolder);
 };
 const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, destination, index, output, processHasDone) => {
