@@ -13,7 +13,7 @@ interface AssetMetaData {
 
 const MakeTGZ = async (tmpFolder: string, output: string) => {
     info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
-    await exec("tar -zcf " + output + " " + tmpFolder);
+    await exec("tar -zcf \"" + output + "\" \"" + tmpFolder + "\"");
     await rmRF(tmpFolder);
 };
 
