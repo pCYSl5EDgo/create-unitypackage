@@ -11,8 +11,8 @@ const MakeTGZ = async (tmpFolder, output) => {
     await compressing_1.tgz.compressDir(tmpFolder, output);
     await io_1.rmRF(tmpFolder);
 };
-const CreateOneAssetFolder = (metaFileRelativePathWithoutExtension, projectRoot, destination, index, output, processHasDone) => {
-    const metaFileAbsolutePath = path_1.join(projectRoot, metaFileRelativePathWithoutExtension + ".meta");
+const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, destination, index, output, processHasDone) => {
+    const metaFileAbsolutePath = path_1.join(projectRoot, metaFileRelativePathWithExtension);
     fs_1.readFile(metaFileAbsolutePath, { encoding: "utf-8" }, async (err, data) => {
         if (err) {
             throw err;
@@ -23,9 +23,11 @@ const CreateOneAssetFolder = (metaFileRelativePathWithoutExtension, projectRoot,
         await io_1.mkdirP(dir);
         const assetMetaCpPromise = io_1.cp(metaFileAbsolutePath, path_1.join(dir, "asset.meta"));
         if (metaDatum.folderAsset !== "yes") {
-            await io_1.cp(path_1.join(projectRoot, metaFileRelativePathWithoutExtension), path_1.join(dir, "asset"));
+            const assetFileAbsolutePath = metaFileAbsolutePath.substr(0, metaFileAbsolutePath.length - 5);
+            await io_1.cp(assetFileAbsolutePath, path_1.join(dir, "asset"));
         }
-        fs_1.writeFile(path_1.join(dir, "pathname"), metaFileRelativePathWithoutExtension, async () => {
+        const assetFileRelativePath = metaFileRelativePathWithExtension.substr(0, metaFileRelativePathWithExtension.length - 5);
+        fs_1.writeFile(path_1.join(dir, "pathname"), assetFileRelativePath, async () => {
             await assetMetaCpPromise;
             processHasDone[index] = true;
             if (processHasDone.indexOf(false) === -1)
