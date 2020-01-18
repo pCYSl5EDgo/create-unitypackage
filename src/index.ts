@@ -28,7 +28,7 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, project
 
         await mkdirP(dir);
 
-        const assetMetaCpPromise: Promise<void> = cp(metaFileAbsolutePath, join(dir, "asset.meta"));
+        await cp(metaFileAbsolutePath, join(dir, "asset.meta"));
 
         if (metaDatum.folderAsset !== "yes") {
             const assetFileAbsolutePath = metaFileAbsolutePath.substr(0, metaFileAbsolutePath.length - 5);
@@ -37,7 +37,6 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, project
 
         const assetFileRelativePath = metaFileRelativePathWithExtension.substr(0, metaFileRelativePathWithExtension.length - 5);
         writeFile(join(dir, "pathname"), assetFileRelativePath, async () => {
-            await assetMetaCpPromise;
             processHasDone[index] = true;
             if (processHasDone.indexOf(false) === -1)
                 await MakeTGZ(destination, output);
@@ -63,12 +62,17 @@ const Run = () => {
 
     const projectFolder = getInput("project-folder", { required: false }) ?? "./";
 
-    const includeFiles = getInput("include-files", { required: true });
-    const tmpFolder = tmpdir();
-    const metaFiles = Split(includeFiles);
-    const processHasDone = new Array(metaFiles.length);
-    processHasDone.fill(false);
-    ProcessMetaFiles(metaFiles, projectFolder, tmpFolder, output, processHasDone);
+    const includeFilesPath = getInput("include-files", { required: true });
+    readFile(includeFilesPath, { encoding: "utf-8" }, (err, data) => {
+        if (err) {
+            throw err;
+        }
+        const tmpFolder = tmpdir();
+        const metaFiles = Split(data);
+        const processHasDone = new Array(metaFiles.length);
+        processHasDone.fill(false);
+        ProcessMetaFiles(metaFiles, projectFolder, tmpFolder, output, processHasDone);
+    });
 };
 
 Run();

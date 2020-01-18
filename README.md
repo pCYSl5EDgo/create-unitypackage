@@ -11,7 +11,7 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 ### Required Inputs
 
 * `package-path` - Output unitypackage path.
-* `include-files` - Include files&amp;directories. This argument should be multi-line content. Each line should ends with .meta file extension. Do not forget about directories.
+* `include-files` - A file path which includes .meta files&amp;directories. Each line of this file should ends with .meta file extension. Do not forget about directories.
 
 ### Not Required Inputs
 
@@ -32,18 +32,13 @@ jobs:
     - run: |
         echo "Assets/Voiceer.meta" > metaList
         find ./Assets/Voiceer/ -name \*.meta >> metaList
-    - uses: pCYSl5EDgo/cat@master
-      id: metas
-      with:
-        path: metaList
-        trim: true
-
+        
     - run: mkdir a
 
     - uses: pCYSl5EDgo/create-unitypackage@master
       with:
         package-path: 'a/output.unitypackage'
-        include-files: ${{ steps.metas.outputs.text }}
+        include-files: metaList
     - uses: actions/upload-artifact@master
       with:
         path: a
