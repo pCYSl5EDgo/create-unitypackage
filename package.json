@@ -1,0 +1,31 @@
+{
+  "name": "create-unitypackage",
+  "version": "1.0.0",
+  "description": "An action to create unitypackage",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pCYSl5EDgo/create-unitypackage.git"
+  },
+  "author": "pCYSl5EDgo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pCYSl5EDgo/create-unitypackage/issues"
+  },
+  "homepage": "https://github.com/pCYSl5EDgo/create-unitypackage#readme",
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^13.1.7",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.1",
+    "@actions/io": "^1.0.2",
+    "compressing": "^1.5.0",
+    "js-yaml": "^3.13.1"
+  }
+}

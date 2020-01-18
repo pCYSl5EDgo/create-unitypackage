@@ -1,0 +1,16 @@
+name: 'Setup Unity Editor for use with actions'
+description: 'This action sets up an Unity Editor for use in actions'
+author: 'pCYSl5EDgo'
+inputs:
+  package-path:
+    description: 'Output unitypackage file path'
+    required: true
+  include-files:
+    description: 'Relative file paths from project-folder. Multi-line string value. Each line should ends with .meta.'
+    required: true
+  project-folder:
+    description: 'Unity project folder. Default => ./'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
