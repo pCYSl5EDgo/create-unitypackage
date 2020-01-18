@@ -3,7 +3,7 @@ import { mkdirP, cp, rmRF } from '@actions/io';
 import { exec } from '@actions/exec';
 import { safeLoad } from 'js-yaml';
 import { readFile, writeFile } from 'fs';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { tmpdir } from 'os';
 
 interface AssetMetaData {
@@ -60,7 +60,8 @@ const Split = (linesConcat: string) => {
 
 const Run = () => {
     const output = getInput("package-path", { required: true });
-
+    let name = basename(output);
+    name = name.substr(0, name.length - 13);
     const projectFolder = getInput("project-folder", { required: false }) ?? "./";
 
     const includeFilesPath = getInput("include-files", { required: true });
@@ -68,7 +69,7 @@ const Run = () => {
         if (err) {
             throw err;
         }
-        const tmpFolder = tmpdir();
+        const tmpFolder = join(tmpdir(), name);
         mkdirP(tmpFolder);
         info("include-files\n\n" + data);
         const metaFiles = Split(data);

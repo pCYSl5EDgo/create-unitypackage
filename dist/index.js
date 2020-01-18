@@ -48,13 +48,15 @@ const Split = (linesConcat) => {
 const Run = () => {
     var _a;
     const output = core_1.getInput("package-path", { required: true });
+    let name = path_1.basename(output);
+    name = name.substr(0, name.length - 13);
     const projectFolder = (_a = core_1.getInput("project-folder", { required: false }), (_a !== null && _a !== void 0 ? _a : "./"));
     const includeFilesPath = core_1.getInput("include-files", { required: true });
     fs_1.readFile(includeFilesPath, { encoding: "utf-8" }, (err, data) => {
         if (err) {
             throw err;
         }
-        const tmpFolder = os_1.tmpdir();
+        const tmpFolder = path_1.join(os_1.tmpdir(), name);
         io_1.mkdirP(tmpFolder);
         core_1.info("include-files\n\n" + data);
         const metaFiles = Split(data);
