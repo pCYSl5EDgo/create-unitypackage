@@ -8,6 +8,7 @@ const path_1 = require("path");
 const os_1 = require("os");
 const compressing_1 = require("compressing");
 const MakeTGZ = async (tmpFolder, output) => {
+    core_1.info("\n\ntmpFolder : " + tmpFolder);
     await compressing_1.tgz.compressDir(tmpFolder, output);
     await io_1.rmRF(tmpFolder);
 };
@@ -54,6 +55,8 @@ const Run = () => {
             throw err;
         }
         const tmpFolder = os_1.tmpdir();
+        io_1.mkdirP(tmpFolder);
+        core_1.info("include-files\n\n" + data);
         const metaFiles = Split(data);
         const processHasDone = new Array(metaFiles.length);
         processHasDone.fill(false);

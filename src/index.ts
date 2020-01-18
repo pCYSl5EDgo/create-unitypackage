@@ -1,4 +1,4 @@
-import { getInput } from '@actions/core';
+import { getInput, info } from '@actions/core';
 import { mkdirP, cp, rmRF } from '@actions/io';
 import { safeLoad } from 'js-yaml';
 import { readFile, writeFile } from 'fs';
@@ -12,6 +12,7 @@ interface AssetMetaData {
 }
 
 const MakeTGZ = async (tmpFolder: string, output: string) => {
+    info("\n\ntmpFolder : " + tmpFolder);
     await tgz.compressDir(tmpFolder, output);
     await rmRF(tmpFolder);
 };
@@ -68,6 +69,8 @@ const Run = () => {
             throw err;
         }
         const tmpFolder = tmpdir();
+        mkdirP(tmpFolder);
+        info("include-files\n\n" + data);
         const metaFiles = Split(data);
         const processHasDone = new Array(metaFiles.length);
         processHasDone.fill(false);
