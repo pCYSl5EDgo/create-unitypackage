@@ -8,9 +8,10 @@ const path_1 = require("path");
 const os_1 = require("os");
 const compressing_1 = require("compressing");
 const MakeTGZ = async (tmpFolder, output) => {
-    core_1.info("\n\ntmpFolder : " + tmpFolder);
-    await compressing_1.tgz.compressDir(tmpFolder, output);
+    core_1.info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
+    await compressing_1.tgz.compressDir(tmpFolder, output + ".tgz");
     await io_1.rmRF(tmpFolder);
+    await io_1.mv(output + ".tgz", output, { force: true });
 };
 const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, destination, index, output, processHasDone) => {
     const metaFileAbsolutePath = path_1.join(projectRoot, metaFileRelativePathWithExtension);

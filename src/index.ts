@@ -1,5 +1,5 @@
 import { getInput, info } from '@actions/core';
-import { mkdirP, cp, rmRF } from '@actions/io';
+import { mkdirP, cp, rmRF, mv } from '@actions/io';
 import { safeLoad } from 'js-yaml';
 import { readFile, writeFile } from 'fs';
 import { join } from 'path';
@@ -12,9 +12,10 @@ interface AssetMetaData {
 }
 
 const MakeTGZ = async (tmpFolder: string, output: string) => {
-    info("\n\ntmpFolder : " + tmpFolder);
-    await tgz.compressDir(tmpFolder, output);
+    info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
+    await tgz.compressDir(tmpFolder, output + ".tgz");
     await rmRF(tmpFolder);
+    await mv(output + ".tgz", output, { force: true });
 };
 
 const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, projectRoot: string, destination: string, index: number, output: string, processHasDone: boolean[]) => {
