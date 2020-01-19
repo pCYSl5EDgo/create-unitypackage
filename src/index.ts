@@ -14,13 +14,13 @@ interface AssetMetaData {
 const MakeTGZ = async (tmpFolder: string, output: string) => {
     info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
     const archtemp = join(tmpdir(), "archtemp.tar");
-    await exec("tar -cf " + archtemp + " -C \"" + tmpFolder + "\" *");
+    await exec("tar -cf " + archtemp + ' "' + (tmpFolder.endsWith("/") ? tmpFolder : tmpFolder + '/') + '"');
     await exec('gzip -f ' + archtemp);
     await mv(archtemp + ".gz", output);
     await rmRF(tmpFolder);
 };
 
-const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, projectRoot: string, destination: string, index: number, output: string, processHasDone: boolean[]) => {
+const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, projectRoot: string, tmpFolder: string, index: number, output: string, processHasDone: boolean[]) => {
     const metaFileAbsolutePath = join(projectRoot, metaFileRelativePathWithExtension);
     readFile(metaFileAbsolutePath, { encoding: "utf-8" }, async (err, data) => {
         if (err) {
@@ -28,7 +28,7 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, project
         }
         const metaDatum: AssetMetaData = safeLoad(data);
         const guid = metaDatum.guid;
-        const dir = join(destination, guid);
+        const dir = join(tmpFolder, guid);
 
         await mkdirP(dir);
 
@@ -43,7 +43,7 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension: string, project
         writeFile(join(dir, "pathname"), assetFileRelativePath, async () => {
             processHasDone[index] = true;
             if (processHasDone.indexOf(false) === -1)
-                await MakeTGZ(destination, output);
+                await MakeTGZ(tmpFolder, output);
         });
     });
 };
@@ -68,12 +68,12 @@ const Run = () => {
     const projectFolder = getInput("project-folder", { required: false }) ?? "./";
 
     const includeFilesPath = getInput("include-files", { required: true });
-    readFile(includeFilesPath, { encoding: "utf-8" }, (err, data) => {
+    readFile(includeFilesPath, { encoding: "utf-8" }, async (err, data) => {
         if (err) {
             throw err;
         }
-        const tmpFolder = join(tmpdir(), name);
-        mkdirP(tmpFolder);
+        const tmpFolder = join(tmpdir(), name, "archtemp");
+        await mkdirP(tmpFolder);
         info("include-files\n\n" + data);
         const metaFiles = Split(data);
         const processHasDone = new Array(metaFiles.length);

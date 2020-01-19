@@ -10,12 +10,12 @@ const os_1 = require("os");
 const MakeTGZ = async (tmpFolder, output) => {
     core_1.info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
     const archtemp = path_1.join(os_1.tmpdir(), "archtemp.tar");
-    await exec_1.exec("tar -cf " + archtemp + " -C \"" + tmpFolder + "\" *");
+    await exec_1.exec("tar -cf " + archtemp + ' "' + (tmpFolder.endsWith("/") ? tmpFolder : tmpFolder + '/') + '"');
     await exec_1.exec('gzip -f ' + archtemp);
     await io_1.mv(archtemp + ".gz", output);
     await io_1.rmRF(tmpFolder);
 };
-const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, destination, index, output, processHasDone) => {
+const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, tmpFolder, index, output, processHasDone) => {
     const metaFileAbsolutePath = path_1.join(projectRoot, metaFileRelativePathWithExtension);
     fs_1.readFile(metaFileAbsolutePath, { encoding: "utf-8" }, async (err, data) => {
         if (err) {
@@ -23,7 +23,7 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, de
         }
         const metaDatum = js_yaml_1.safeLoad(data);
         const guid = metaDatum.guid;
-        const dir = path_1.join(destination, guid);
+        const dir = path_1.join(tmpFolder, guid);
         await io_1.mkdirP(dir);
         await io_1.cp(metaFileAbsolutePath, path_1.join(dir, "asset.meta"));
         if (metaDatum.folderAsset !== "yes") {
@@ -34,7 +34,7 @@ const CreateOneAssetFolder = (metaFileRelativePathWithExtension, projectRoot, de
         fs_1.writeFile(path_1.join(dir, "pathname"), assetFileRelativePath, async () => {
             processHasDone[index] = true;
             if (processHasDone.indexOf(false) === -1)
-                await MakeTGZ(destination, output);
+                await MakeTGZ(tmpFolder, output);
         });
     });
 };
@@ -55,12 +55,12 @@ const Run = () => {
     name = name.substr(0, name.length - 13);
     const projectFolder = (_a = core_1.getInput("project-folder", { required: false }), (_a !== null && _a !== void 0 ? _a : "./"));
     const includeFilesPath = core_1.getInput("include-files", { required: true });
-    fs_1.readFile(includeFilesPath, { encoding: "utf-8" }, (err, data) => {
+    fs_1.readFile(includeFilesPath, { encoding: "utf-8" }, async (err, data) => {
         if (err) {
             throw err;
         }
-        const tmpFolder = path_1.join(os_1.tmpdir(), name);
-        io_1.mkdirP(tmpFolder);
+        const tmpFolder = path_1.join(os_1.tmpdir(), name, "archtemp");
+        await io_1.mkdirP(tmpFolder);
         core_1.info("include-files\n\n" + data);
         const metaFiles = Split(data);
         const processHasDone = new Array(metaFiles.length);
