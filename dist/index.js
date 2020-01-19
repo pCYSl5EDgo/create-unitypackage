@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@actions/core");
 const io_1 = require("@actions/io");
 const exec_1 = require("@actions/exec");
+const child_process_1 = require("child_process");
 const js_yaml_1 = require("js-yaml");
 const fs_1 = require("fs");
 const path_1 = require("path");
@@ -10,7 +11,7 @@ const os_1 = require("os");
 const MakeTGZ = async (tmpFolder, output) => {
     core_1.info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
     const archtemp = path_1.join(os_1.tmpdir(), "archtemp.tar");
-    await exec_1.exec("tar -cf " + archtemp + ' "' + (tmpFolder.endsWith("/") ? tmpFolder : tmpFolder + '/') + '"');
+    child_process_1.execSync('cd ' + tmpFolder + "\ntar -cf ../../archtemp.tar ./");
     await exec_1.exec('gzip -f ' + archtemp);
     await io_1.mv(archtemp + ".gz", output);
     await io_1.rmRF(tmpFolder);

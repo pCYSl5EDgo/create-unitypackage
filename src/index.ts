@@ -1,6 +1,7 @@
 import { getInput, info } from '@actions/core';
 import { mkdirP, cp, rmRF, mv } from '@actions/io';
 import { exec } from '@actions/exec';
+import { execSync } from 'child_process';
 import { safeLoad } from 'js-yaml';
 import { readFile, writeFile } from 'fs';
 import { join, basename } from 'path';
@@ -14,7 +15,7 @@ interface AssetMetaData {
 const MakeTGZ = async (tmpFolder: string, output: string) => {
     info("\n\ntmpFolder : " + tmpFolder + "\noutput : " + output);
     const archtemp = join(tmpdir(), "archtemp.tar");
-    await exec("tar -cf " + archtemp + ' "' + (tmpFolder.endsWith("/") ? tmpFolder : tmpFolder + '/') + '"');
+    execSync('cd ' + tmpFolder + "\ntar -cf ../../archtemp.tar ./");
     await exec('gzip -f ' + archtemp);
     await mv(archtemp + ".gz", output);
     await rmRF(tmpFolder);
