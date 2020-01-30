@@ -17,7 +17,7 @@ const Run = () => {
         if (err)
             throw err;
         const metaFiles = Split(data);
-        unitypackage_1.createUnityPackageFromMetaFilePaths(metaFiles, projectFolder, output);
+        unitypackage_1.createUnityPackage(metaFiles, projectFolder, output, core_1.info);
     });
 };
 Run();

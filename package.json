@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.1",
-    "unitypackage": "^1.0.2"
+    "unitypackage": "^1.0.0"
   }
 }
