@@ -1,6 +1,6 @@
-import { getInput, info } from '@actions/core';
+import { getInput } from '@actions/core';
 import { readFile } from 'fs';
-import { createUnityPackage } from 'unitypackage';
+import { createUnityPackageFromMetaFilePaths } from 'unitypackage';
 
 const IsNotNullOrWhiteSpace = (value: string) => value && value.trim();
 
@@ -16,7 +16,7 @@ const Run = () => {
     readFile(includeFilesPath, { encoding: "utf-8" }, async (err, data) => {
         if (err) throw err;
         const metaFiles = Split(data);
-        createUnityPackage(metaFiles, projectFolder, output, info);
+        createUnityPackageFromMetaFilePaths(metaFiles, projectFolder, output);
     });
 };
 
