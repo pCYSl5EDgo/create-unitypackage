@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         echo "Assets/Voiceer.meta" > metaList
-        find ./Assets/Voiceer/ -name \*.meta >> metaList
+        find Assets/Voiceer/ -name \*.meta >> metaList
 
     - run: mkdir a
 
