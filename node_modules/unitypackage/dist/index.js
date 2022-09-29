@@ -1,6 +1,6 @@
 import { exec } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { copyFile, mkdir, mkdtemp, readFile, rmdir, writeFile, stat } from 'node:fs/promises';
+import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile, stat } from 'node:fs/promises';
 import { load } from 'js-yaml';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -11,22 +11,22 @@ export var InternalImplementation;
         throw err;
     } }
     ;
-    const recursiveDelete = { recursive: true };
+    const recursiveDelete = { recursive: true, force: true };
     async function createUnityPackageFromFolder(folderContainsMetaFolders, output, callback, logger, removeDirs) {
         const tmpDirectory = join(tmpdir(), "tmp");
         const archtemp = join(tmpDirectory, "archtemp.tar");
-        await rmdir(tmpDirectory, recursiveDelete);
+        await rm(tmpDirectory, recursiveDelete);
         await mkdir(tmpDirectory);
         async function totalEnd() {
             const archtemp_gzip = archtemp + '.gz';
             await copyFile(archtemp_gzip, output);
             if (removeDirs) {
                 for (const removeDir of removeDirs) {
-                    await rmdir(removeDir, recursiveDelete);
+                    await rm(removeDir, recursiveDelete);
                 }
             }
             try {
-                await rmdir(tmpDirectory, recursiveDelete);
+                await rm(tmpDirectory, recursiveDelete);
             }
             catch (error) {
                 if (callback) {
