@@ -1,6 +1,6 @@
 import { getInput, info } from '@actions/core';
 import create from 'unitypackage';
-import { readFile } from 'fs';
+import { readFile } from 'node:fs/promises';
 
 const IsNotNullOrWhiteSpace = (value: string) => value && value.trim();
 
@@ -9,18 +9,14 @@ const Split = (linesConcat: string) => {
     return splits.filter(IsNotNullOrWhiteSpace);
 };
 
-const Run = () => {
+const Run = async () => {
     const output = getInput("package-path", { required: true });
     const projectFolder = getInput("project-folder", { required: false }) ?? "./";
 
     const includeFilesPath = getInput("include-files", { required: true });
-    readFile(includeFilesPath, { encoding: "utf-8" }, async (err, data) => {
-        if (err) {
-            throw err;
-        }
-        const metaFiles = Split(data);
-        create(metaFiles, projectFolder, output, info);
-    });
+    const data = await readFile(includeFilesPath, { encoding: "utf-8" });
+    const metaFiles = Split(data);
+    await create(metaFiles, projectFolder, output, info);
 };
 
-Run();
+await Run();
