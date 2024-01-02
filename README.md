@@ -10,12 +10,12 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 
 ### Required Inputs
 
-* `package-path` - Output unitypackage path. This should end with .unitypackage.
-* `include-files` - A file path which includes .meta files&amp;directories. Each line of this file should ends with .meta file extension. Do not forget about directories.
+* `package-path` - Output unitypackage path relative from `working-folder`. This should end with .unitypackage.
+* `include-files` - A file path which includes .meta files&amp;directories relative from `working-folder`. Each line of this file should ends with .meta file extension. Do not forget about directories.
 
 ### Not Required Inputs
 
-* `project-folder` - Unity project folder. Default Value => &quot;./&quot;
+* `project-folder` - Unity project folder relative from `working-folder`. Default Value => &quot;./&quot;
 * `working-folder` - This action changes directory at first step. All other input values are then read at `working-folder`. Default Value => &quot;./&quot;
 
 ### Example workflow
