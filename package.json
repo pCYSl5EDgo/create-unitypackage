@@ -1,6 +1,6 @@
 {
   "name": "create-unitypackage",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "type": "module",
   "description": "An action to create unitypackage",
   "main": "dist/index.js",
