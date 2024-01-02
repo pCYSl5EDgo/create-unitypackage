@@ -11,6 +11,9 @@ inputs:
   project-folder:
     description: 'Unity project folder. Default => ./'
     required: false
+  working-folder:
+    description: 'The working folder where this Node.js script runs. Please keep in mind that this script changes directory at first.'
+    required: false
 runs:
   using: 'node20'
   main: 'dist/index.js'
