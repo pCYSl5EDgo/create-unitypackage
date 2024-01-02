@@ -1,6 +1,6 @@
 {
   "name": "create-unitypackage",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "description": "An action to create unitypackage",
   "main": "dist/index.js",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@actions/core": "^1.9.1",
     "@types/node": "^20.10.6",
-    "unitypackage": "^1.0.7"
+    "unitypackage": "^1.0.8"
   },
   "devDependencies": {
     "typescript": "^5.3.3"
