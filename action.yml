@@ -1,6 +1,9 @@
 name: 'create-unitypackage'
 description: 'This action sets up an Unity Editor for use in actions'
 author: 'pCYSl5EDgo'
+branding:
+  icon: 'box'
+  color: 'orange'
 inputs:
   package-path:
     description: 'Output unitypackage file path'
