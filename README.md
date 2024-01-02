@@ -16,6 +16,7 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 ### Not Required Inputs
 
 * `project-folder` - Unity project folder. Default Value => &quot;./&quot;
+* `working-folder` - This action changes directory at first step. All other input values are then read at `working-folder`. Default Value => &quot;./&quot;
 
 ### Example workflow
 
