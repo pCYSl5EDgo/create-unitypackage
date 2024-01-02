@@ -1,6 +1,6 @@
 {
   "name": "create-unitypackage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "An action to create unitypackage",
   "main": "dist/index.js",
@@ -18,12 +18,12 @@
     "url": "https://github.com/pCYSl5EDgo/create-unitypackage/issues"
   },
   "homepage": "https://github.com/pCYSl5EDgo/create-unitypackage#readme",
-  "devDependencies": {
-    "@types/node": "^16.0.0",
-    "typescript": "^4.8.0"
-  },
   "dependencies": {
     "@actions/core": "^1.9.1",
+    "@types/node": "^20.10.6",
     "unitypackage": "^1.0.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
   }
 }
