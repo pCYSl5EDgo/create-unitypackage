@@ -11,7 +11,7 @@ const workingFolder = getInput("working-folder", { required: false });
 const output = getInput("package-path", { required: true });
 const projectFolder = getInput("project-folder", { required: false }) ?? "./";
 const includeFilesPath = getInput("include-files", { required: true });
-if (workingFolder != null) {
+if (workingFolder) {
     chdir(workingFolder);
 }
 const data = await readFile(includeFilesPath, { encoding: "utf-8" });
